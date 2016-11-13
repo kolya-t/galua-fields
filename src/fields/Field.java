@@ -27,6 +27,15 @@ public class Field {
         DESC // по убыванию
     }
 
+    private static final String regex = "[^01]";
+
+    /**
+     * @param items строка с положением битов "от старших к младшим"
+     */
+    public Field(String items) {
+        this(Direction.DESC, items);
+    }
+
     /**
      * @param direction DESC - от старших к младшим битам,
      *                  ASC - от младших к старшим
@@ -34,7 +43,7 @@ public class Field {
      */
     public Field(Direction direction, String items) {
         // удаляем лишние символы из входящей строки
-        String string = items.replaceAll("[^01]", "");
+        String string = items.replaceAll(regex, "");
 
         this.items = new BitSet(string.length());
 
@@ -65,16 +74,9 @@ public class Field {
      * @return результат сложения полиномов
      */
     public Field add(Field field) {
-        BitSet set = (BitSet) items.clone();
-        set.xor(field.items);
-        return new Field(set);
-    }
-
-    /**
-     * @param items строка с положением битов "от старших к младшим"
-     */
-    public Field(String items) {
-        this(Direction.DESC, items);
+        BitSet bits = (BitSet) items.clone();
+        bits.xor(field.items);
+        return new Field(bits);
     }
 
     /**
@@ -104,5 +106,31 @@ public class Field {
                 return b.append(']').toString();
             b.append(' '); // b.append(", ");
         }
+    }
+
+    /**
+     * Статический метод перевода полинома в десятичное число
+     * @param field исходный полином
+     * @return полином в десятичном виде
+     */
+    public static int toInt(Field field) {
+        return Integer.parseInt(field.toString().replaceAll(regex, ""), 2);
+    }
+
+    /**
+     * Статический метод перевода полинома в десятичное число
+     * @param field исходный полином в виде строки (в свободном стиле)
+     * @return полином в десятичном виде
+     */
+    public static int toInt(String field) {
+        return toInt(new Field(field));
+    }
+
+    /**
+     * Метод перевода полинома в десятичное число
+     * @return полином в десятичном виде
+     */
+    public int toInt() {
+        return toInt(this);
     }
 }

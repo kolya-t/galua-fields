@@ -12,5 +12,8 @@ public class Main {
         System.out.printf("%-20s %-20s\n", "with brackets:",  new Field("[1,1 ,0,1, 1 0, 0]"));
 
         System.out.printf("%-20s %-20s\n", "a + b:", a.add(b));
+
+        System.out.printf("%-20s %-20s\n", "in decimal:", new Field("[100 0000 0000]").toInt());
+        System.out.printf("%-20s %-20s\n", "from string:", Field.toInt("[100 0000 0010]"));
     }
 }
