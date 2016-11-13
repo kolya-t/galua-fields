@@ -1,6 +1,5 @@
 package fields;
 
-import java.util.Arrays;
 import java.util.BitSet;
 
 /**
@@ -47,7 +46,7 @@ public class Field {
 
         this.items = new BitSet(string.length());
 
-        // если подана строка в "от старших битов к младшим"
+        // если подана строка в виде "от старших битов к младшим"
         if (direction == Direction.DESC) {
             string = new StringBuilder(string).reverse().toString();
         }
@@ -79,6 +78,11 @@ public class Field {
         return new Field(bits);
     }
 
+    /**
+     * Операция умножения двух полиномов
+     * @param field полином, с которым нужно перемножить исходный полином
+     * @return результат умножения полиномов
+     */
     public Field mul(Field field) {
         BitSet resultSet = new BitSet();
 
@@ -167,7 +171,7 @@ public class Field {
     }
 
     /**
-     * @return строка вида x^3+x^1
+     * @return строка вида x^3 + x + 1
      */
     public String toPolynomialString() {
         if (items == null)
@@ -211,7 +215,7 @@ public class Field {
 
     @Override
     public String toString() {
-        return toPolynomialString();
+        return toBinaryString();
     }
 
     /**
