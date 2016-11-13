@@ -36,7 +36,7 @@ public class Field {
         // удаляем лишние символы из входящей строки
         String string = items.replaceAll("[^01]", "");
 
-        this.items = new BitSet(items.length());
+        this.items = new BitSet(string.length());
 
         // если подана строка в "от старших битов к младшим"
         if (direction == Direction.DESC) {
@@ -49,6 +49,25 @@ public class Field {
                 this.items.set(i);
             }
         }
+    }
+
+    /**
+     * Приватный конструктор на основе BitSet
+     * @param set сет, на основе которого нужно создать полином
+     */
+    private Field(BitSet set) {
+        items = set;
+    }
+
+    /**
+     * Операция сложения двух полиномов
+     * @param field полином, с которым нужно сложить исходный полином
+     * @return результат сложения полиномов
+     */
+    public Field add(Field field) {
+        BitSet set = (BitSet) items.clone();
+        set.xor(field.items);
+        return new Field(set);
     }
 
     /**

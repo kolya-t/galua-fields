@@ -10,5 +10,7 @@ public class Main {
         System.out.printf("%-20s %-20s\n", "ascending:",      new Field(Field.Direction.ASC, "0011011"));
         System.out.printf("%-20s %-20s\n", "descending:",     new Field(Field.Direction.DESC, "1101100"));
         System.out.printf("%-20s %-20s\n", "with brackets:",  new Field("[1,1 ,0,1, 1 0, 0]"));
+
+        System.out.printf("%-20s %-20s\n", "a + b:", a.add(b));
     }
 }
