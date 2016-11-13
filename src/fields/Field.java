@@ -79,6 +79,65 @@ public class Field {
         return new Field(bits);
     }
 
+    public Field mul(Field field) {
+        BitSet resultSet = new BitSet();
+
+        int setBitIdx = field.items.nextSetBit(0);
+        while (setBitIdx != -1) {
+            resultSet.xor(shl(setBitIdx).items);
+            setBitIdx = field.items.nextSetBit(setBitIdx + 1);
+        }
+
+        return new Field(resultSet);
+    }
+
+    /**
+     * Нециклический сдвиг влево. Операция не изменяет исходный полином.
+     * Если bitCount отрицательна, то сдвиг происходит на -bitCount в другую
+     * сторону.
+     * @param bitCount количество бит, на сколько нужно сдивнуть исходную
+     *                 последовательность битов
+     * @return полином, последовательность бит которого сдвинута влево на
+     * bitCount битов
+     */
+    public Field shl(int bitCount) {
+        if (bitCount == 0) {
+            return this;
+        }
+        if (bitCount < 0) {
+            return shr(-bitCount);
+        }
+
+        BitSet bitSet = new BitSet(length() + bitCount);
+        for (int i = 0; i < length(); i++) {
+            if (items.get(i)) {
+                bitSet.set(i + bitCount);
+            }
+        }
+        return new Field(bitSet);
+    }
+
+    /**
+     * Нециклический сдвиг влево. Операция не изменяет исходный полином.
+     * Если bitCount отрицательна, то сдвиг происходит на -bitCount в другую
+     * сторону.
+     * @param bitCount количество бит, на сколько нужно сдивнуть исходную
+     *                 последовательность битов
+     * @return полином, последовательность бит которого сдвинута вправо на
+     * bitCount битов
+     */
+    public Field shr(int bitCount) {
+        if (bitCount == 0) {
+            return this;
+        }
+        if (bitCount < 0) {
+            return shl(-bitCount);
+        }
+
+        BitSet bitSet = items.get(bitCount, length());
+        return new Field(bitSet);
+    }
+
     /**
      * @return количество используемых бит
      */
@@ -87,10 +146,9 @@ public class Field {
     }
 
     /**
-     * @return представление в виде [1 0 0 1 1]
+     * @return строка вида [1 0 0 1 1]
      */
-    @Override
-    public String toString() {
+    public String toBinaryString() {
         if (items == null)
             return "null";
 
@@ -109,12 +167,60 @@ public class Field {
     }
 
     /**
+     * @return строка вида x^3+x^1
+     */
+    public String toPolynomialString() {
+        if (items == null)
+            return "null";
+
+        int iMax = length() - 1;
+        if (iMax == -1)
+            return "0";
+
+        StringBuilder b = new StringBuilder();
+        for (int i = 0; ; i++) {
+            // если встретилась единица
+            if (items.get(iMax - i)) {
+                // если одночлен x^0
+                if (iMax - i == 0) {
+                    b.append("1");
+                }
+                // если одночлен x^1
+                else if (iMax - i == 1) {
+                    b.append("x");
+                }
+                // если степень одночлена > 1
+                else {
+                    b.append("x^").append(iMax - i);
+                }
+
+                if (i != iMax) {
+                    b.append(" + ");
+                }
+            }
+            // если это последний одночлен этого полинома
+            if (i == iMax) {
+                String string = b.toString();
+                if (string.endsWith(" + ")) {
+                    string = string.substring(0, string.length() - 3);
+                }
+                return string;
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return toPolynomialString();
+    }
+
+    /**
      * Статический метод перевода полинома в десятичное число
      * @param field исходный полином
      * @return полином в десятичном виде
      */
     public static int toInt(Field field) {
-        return Integer.parseInt(field.toString().replaceAll(regex, ""), 2);
+        return Integer.parseInt(field.toBinaryString().replaceAll(regex, ""), 2);
     }
 
     /**

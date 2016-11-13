@@ -15,5 +15,8 @@ public class Main {
 
         System.out.printf("%-20s %-20s\n", "in decimal:", new Field("[100 0000 0000]").toInt());
         System.out.printf("%-20s %-20s\n", "from string:", Field.toInt("[100 0000 0010]"));
+        System.out.printf("%-20s %-20s\n", "shift a left by 3:", a.shl(3));
+        System.out.printf("%-20s %-20s\n", "shift a right by 3:", a.shr(3));
+        System.out.printf("%-20s %-20s\n", "a * b:", a.mul(b));
     }
 }
