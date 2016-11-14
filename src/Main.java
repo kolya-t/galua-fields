@@ -18,5 +18,6 @@ public class Main {
         System.out.printf("%-20s %-20s\n", "shift a left by 3:", a.shl(3));
         System.out.printf("%-20s %-20s\n", "shift a right by 3:", a.shr(3));
         System.out.printf("%-20s %-20s\n", "a * b:", a.mul(b));
+        System.out.println(a.compareTo(a));
     }
 }

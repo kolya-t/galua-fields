@@ -1,5 +1,6 @@
 package fields;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 
 /**
@@ -93,6 +94,33 @@ public class Field {
         }
 
         return new Field(resultSet);
+    }
+
+    /**
+     * Сравнивает численные значения полиномов (toInt())
+     * @param anotherField полином, с которым нужно сравнить исходный полином
+     * @return значение 0 если x == y,
+     * значение больше нуля, если x > y
+     * и значение меньше нуля если x < y.
+     */
+    public int compareTo(Field anotherField) {
+        return compare(this, anotherField);
+    }
+
+    /**
+     * Сравнивает численные значения полиномов (toInt())
+     * @param x первый полином
+     * @param y второй полином
+     * @return значение 0 если x == y,
+     * значение больше нуля, если x > y
+     * и значение меньше нуля если x < y.
+     */
+    public static int compare(Field x, Field y) {
+        return compare(x.items, y.items);
+    }
+
+    private static int compare(BitSet x, BitSet y) {
+        return x.equals(y) ? 0 : Integer.compare(new Field(x).toInt(), new Field(y).toInt());
     }
 
     /**
@@ -242,5 +270,21 @@ public class Field {
      */
     public int toInt() {
         return toInt(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Field field = (Field) o;
+
+        return items != null ? items.equals(field.items) : field.items == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return items != null ? items.hashCode() : 0;
     }
 }
