@@ -1,4 +1,4 @@
-package fields;
+package eninja.com.galua.fields;
 
 import java.util.BitSet;
 

@@ -1,6 +1,8 @@
-import fields.Field;
+package eninja.com.galua;
 
 import java.util.Arrays;
+import eninja.com.galua.fields.Field;
+
 
 public class Main {
     public static void main(String[] args) {
