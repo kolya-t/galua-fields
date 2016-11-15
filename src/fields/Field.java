@@ -1,6 +1,5 @@
 package fields;
 
-import java.util.ArrayList;
 import java.util.BitSet;
 
 /**
@@ -13,6 +12,12 @@ import java.util.BitSet;
  * наоборот, но стандартно принимается запись от "старших к младшим".
  */
 public class Field {
+    /**
+     * Определяет, каким образом выводятся полиномы:
+     * {@code true} - в полиномиальном виде
+     * {@code false} - в бинарном виде
+     */
+    public static boolean POLYNOMIAL_TO_STRING = true;
 
     private static final int P = 2;
     private static final int M = 1;
@@ -28,6 +33,13 @@ public class Field {
     }
 
     private static final String regex = "[^01]";
+
+    /**
+     * Конструктр по умолчанию, создает полином с нулевым значением
+     */
+    public Field() {
+        this.items = new BitSet();
+    }
 
     /**
      * @param items строка с положением битов "от старших к младшим"
@@ -62,6 +74,7 @@ public class Field {
 
     /**
      * Приватный конструктор на основе BitSet
+     *
      * @param set сет, на основе которого нужно создать полином
      */
     private Field(BitSet set) {
@@ -70,6 +83,7 @@ public class Field {
 
     /**
      * Операция сложения двух полиномов
+     *
      * @param field полином, с которым нужно сложить исходный полином
      * @return результат сложения полиномов
      */
@@ -81,6 +95,7 @@ public class Field {
 
     /**
      * Операция умножения двух полиномов
+     *
      * @param field полином, с которым нужно перемножить исходный полином
      * @return результат умножения полиномов
      */
@@ -97,7 +112,28 @@ public class Field {
     }
 
     /**
+     * Деление полиномов в двоичном поле
+     *
+     * @param divider делитель
+     * @return массив из двухэлементов: частное от деления полиномов
+     * и остаток от деления.
+     */
+    public Field[] div(Field divider) {
+        Field dividend = new Field(items); // делимое
+        Field result = new Field();
+        Field currentResult;
+
+        while (dividend.compareTo(divider) != -1) {
+            currentResult = new Field("1").shl(dividend.length() - divider.length());
+            result = result.add(currentResult);
+            dividend = dividend.add(currentResult.mul(divider));
+        }
+        return new Field[]{result, dividend};
+    }
+
+    /**
      * Сравнивает численные значения полиномов (toInt())
+     *
      * @param anotherField полином, с которым нужно сравнить исходный полином
      * @return значение 0 если x == y,
      * значение больше нуля, если x > y
@@ -109,6 +145,7 @@ public class Field {
 
     /**
      * Сравнивает численные значения полиномов (toInt())
+     *
      * @param x первый полином
      * @param y второй полином
      * @return значение 0 если x == y,
@@ -127,6 +164,7 @@ public class Field {
      * Нециклический сдвиг влево. Операция не изменяет исходный полином.
      * Если bitCount отрицательна, то сдвиг происходит на -bitCount в другую
      * сторону.
+     *
      * @param bitCount количество бит, на сколько нужно сдивнуть исходную
      *                 последовательность битов
      * @return полином, последовательность бит которого сдвинута влево на
@@ -153,6 +191,7 @@ public class Field {
      * Нециклический сдвиг влево. Операция не изменяет исходный полином.
      * Если bitCount отрицательна, то сдвиг происходит на -bitCount в другую
      * сторону.
+     *
      * @param bitCount количество бит, на сколько нужно сдивнуть исходную
      *                 последовательность битов
      * @return полином, последовательность бит которого сдвинута вправо на
@@ -213,17 +252,19 @@ public class Field {
         for (int i = 0; ; i++) {
             // если встретилась единица
             if (items.get(iMax - i)) {
-                // если одночлен x^0
-                if (iMax - i == 0) {
-                    b.append("1");
-                }
-                // если одночлен x^1
-                else if (iMax - i == 1) {
-                    b.append("x");
-                }
-                // если степень одночлена > 1
-                else {
-                    b.append("x^").append(iMax - i);
+                switch (iMax - i) {
+                    // если одночлен x^0
+                    case 0:
+                        b.append('1');
+                        break;
+                    // если одночлен x^1
+                    case 1:
+                        b.append('x');
+                        break;
+                    // если степень одночлена > 1
+                    default:
+                        b.append("x^").append(iMax - i);
+                        break;
                 }
 
                 if (i != iMax) {
@@ -243,20 +284,23 @@ public class Field {
 
     @Override
     public String toString() {
-        return toBinaryString();
+        return POLYNOMIAL_TO_STRING ? toPolynomialString() : toBinaryString();
     }
 
     /**
      * Статический метод перевода полинома в десятичное число
+     *
      * @param field исходный полином
      * @return полином в десятичном виде
      */
     public static int toInt(Field field) {
-        return Integer.parseInt(field.toBinaryString().replaceAll(regex, ""), 2);
+        String s = field.toBinaryString().replaceAll(regex, "");
+        return s.equals("") ? 0 : Integer.parseInt(s, 2);
     }
 
     /**
      * Статический метод перевода полинома в десятичное число
+     *
      * @param field исходный полином в виде строки (в свободном стиле)
      * @return полином в десятичном виде
      */
@@ -266,6 +310,7 @@ public class Field {
 
     /**
      * Метод перевода полинома в десятичное число
+     *
      * @return полином в десятичном виде
      */
     public int toInt() {
