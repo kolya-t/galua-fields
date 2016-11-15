@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Galua</string>
+    <string-array name="operationList">
+        <item>Сложение</item>
+        <item>Умножение</item>
+        <item>Деление</item>
+    </string-array>
 </resources>

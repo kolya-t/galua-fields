@@ -6,7 +6,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
         android:orientation="horizontal">
 
         <EditText
@@ -15,15 +14,18 @@
             android:inputType="number"
             android:ems="10"
             android:id="@+id/editFirstPolynomial"
-            android:text="Первый полином" />
+            android:text="Первый полином"
+            android:layout_margin="10dp" />
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/spinOperation"
             android:layout_weight="1"
+            android:entries="@array/operationList"
             android:spinnerMode="dropdown"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:layout_margin="10dp" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -32,26 +34,28 @@
             android:ems="10"
             android:id="@+id/editSecondPolynomial"
             android:layout_gravity="center_horizontal"
-            android:text="Второй полином" />
+            android:text="Второй полином"
+            android:layout_margin="10dp" />
     </LinearLayout>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Посчитать"
-        android:id="@+id/btnCalcualte"
-        android:layout_gravity="center_horizontal" />
+        android:id="@+id/btnCalculate"
+        android:onClick="calculate"
+        android:allowUndo="true"
+        android:layout_margin="10dp" />
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="39dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -59,8 +63,9 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Результат в полиномиальном виде"
                 android:id="@+id/txtResultPolynomial"
-                android:layout_weight="1"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:layout_margin="5dp"
+                android:layout_weight="1" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -76,8 +81,9 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Остаток в полиномиальном виде"
                 android:id="@+id/txtModulusPolynomial"
-                android:layout_weight="1"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:layout_margin="5dp"
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -93,7 +99,8 @@
                 android:text="Результат в бинарном виде"
                 android:id="@+id/txtResultBinary"
                 android:layout_weight="1"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:layout_margin="5dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -110,8 +117,19 @@
                 android:text="Остаток в бинарном виде"
                 android:id="@+id/txtModulusBinary"
                 android:layout_weight="1"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:layout_margin="5dp" />
+
         </LinearLayout>
     </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        android:id="@+id/btnClear"
+        android:onClick="clear"
+        android:layout_margin="10dp"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
