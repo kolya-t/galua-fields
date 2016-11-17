@@ -11,7 +11,7 @@ import java.util.BitSet;
  * Также поддерживается запись как от младших разрядов к старшим, так и
  * наоборот, но стандартно принимается запись от "старших к младшим".
  */
-public class Field {
+public class Field implements Comparable<Field> {
     /**
      * Определяет, каким образом выводятся полиномы:
      * {@code true} - в полиномиальном виде
@@ -139,6 +139,7 @@ public class Field {
      * значение больше нуля, если x > y
      * и значение меньше нуля если x < y.
      */
+    @Override
     public int compareTo(Field anotherField) {
         return compare(this, anotherField);
     }
